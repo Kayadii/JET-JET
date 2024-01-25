@@ -7,6 +7,9 @@ export default class JETScene extends Phaser.Scene {
 
   init() {
     this.player = undefined;
+    this.speed = 100
+    this.nav_left = false;
+    this.nav_right = false;
   }
 
   preload() {
