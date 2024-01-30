@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Laser from "./Laser";
+import Enemy from "./Enemy";
 
 export default class JETScene extends Phaser.Scene {
   constructor() {
@@ -14,10 +15,14 @@ export default class JETScene extends Phaser.Scene {
     this.player_weapon = undefined;
     this.lasers = undefined;
     this.laserTime = 40;
+    this.score = 0
+    this.life = 3
 
     // Player Movement
     this.speed = 100
     this.cursors = undefined;
+    this.asteroid = undefined;
+    this.enemy = undefined;
   }
 
 
@@ -38,6 +43,22 @@ export default class JETScene extends Phaser.Scene {
 
     // ENEMY
 
+
+    //ASTEROID
+    this.asteroid = this.physics.add.group({
+      classType: Enemy,
+      maxSize: 10,
+      runChildUpdate: true,
+    });
+
+    this.time.addEvent({
+      delay: Phaser.Math.Between(1000, 5000),
+      callback: this.createAsteroid,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.physics.add.collider(this.lasers, this.asteroid, this.killAsteroid, null, this)
   }
 
   update(time) {
@@ -123,15 +144,26 @@ export default class JETScene extends Phaser.Scene {
   }
 
   // Method to create enemy
-  createEnemy(){
+  createAsteroid(){
     // TASK 2: CREATE ENEMY (MAKE CLASS IN Enemy.js)
-
+    const config = {
+      speed: 60,
+      rotation: 0.1,
+    };
+    //@ts-ignore
+    const asteroid = this.asteroid.get(0, 0, "asteroid", config);
+    const positionX = Phaser.Math.Between(50, 350);
+    if (asteroid) {
+      asteroid.spawn(positionX);
+    }
   }
 
   // Method to kill enemy
-  killEnemy(){
+  killAsteroid(laser, asteroid){
     // TASK 3: KILL ENEMY
-
+    laser.die()
+    asteroid.die()
+    this.score += 10
   }
 
 }

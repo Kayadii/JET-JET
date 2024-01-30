@@ -40,7 +40,7 @@ export default class Preload extends Phaser.Scene {
 
     // Enemy ship loadout
     // TASK 2: LOAD ENEMY SHIPS
-
+    
   }
 
   create() {
