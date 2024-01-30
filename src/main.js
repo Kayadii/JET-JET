@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+import Preload from './Preload'
 import JETScene from './JETScene'
 
 const config = {
@@ -17,7 +18,7 @@ const config = {
 		mode: Phaser.Scale.FIT,
 		autoCenter: Phaser.Scale.CENTER_BOTH
 	},
-	scene: [JETScene],
+	scene: [Preload, JETScene],
 }
 
 export default new Phaser.Game(config)
