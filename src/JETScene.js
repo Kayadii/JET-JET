@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Laser from "./Laser";
 import Enemy from "./Enemy";
+import GameSudahKelar from "./GameSudahKelar";
 
 export default class JETScene extends Phaser.Scene {
   constructor() {
@@ -28,6 +29,8 @@ export default class JETScene extends Phaser.Scene {
     this.enemy = undefined;
     
     // TASK 1: Add Score and Life Text
+    this.scoreLabel = undefined;
+    this.lifeLabel = undefined;
   }
 
 
@@ -48,6 +51,19 @@ export default class JETScene extends Phaser.Scene {
 
     // ENEMY
     // TASK 3: Create Enemy Ship Using Enemy Class
+    this.enemy = this.physics.add.group({
+      classType: Enemy,
+      maxSize: 10,
+      runChildUpdate: true,
+    });
+
+    this.time.addEvent({
+      delay: 5000,
+      callback: this.createEnemy,
+      callbackScope: this,
+      loop: true,
+    });
+
 
     //ASTEROID
     this.asteroid = this.physics.add.group({
@@ -64,12 +80,34 @@ export default class JETScene extends Phaser.Scene {
     });
 
     // TASK 4: Add Label for Score and Life
+    this.scoreLabel = this.add.text(10, 10, 'score', { 
+      fontSize : '16px',
+      color : 'black',
+      backgroundColor : 'white'
+    }).setDepth(1)
 
-    this.physics.add.collider(this.lasers, this.asteroid, this.killAsteroid, null, this)
+    this.lifeLable = this.add.text(10, 30, 'life : 3', { 
+      fontSize : '16px',
+      color : 'black',
+      backgroundColor : 'white'
+    }).setDepth(1)
+
+    this.physics.add.overlap(
+      this.player,
+      this.enemy,
+      this.decreaseLife,
+      null,
+      this
+    )
+
+    this.physics.add.overlap(this.lasers, this.asteroid, this.killAsteroid, null, this)
+    this.physics.add.overlap(this.lasers, this.enemy, this.killEnemy, null, this)
   }
 
   update(time) {
     // TASK 5: Add Label for Score and Life Update
+    this.scoreLabel.setText('Score : ' + this.score);
+    this.lifeLable.setText('life : ' + this.life);
     // PLAYER
     this.movePlayer(this.player, time);
   }
@@ -181,12 +219,46 @@ export default class JETScene extends Phaser.Scene {
   // TASK 2: Create Enemy Ship Methods
   // Method to create enemy ship
   createEnemy(){
+    this.anims.create({
+      key: "enemy",
+      frames: this.anims.generateFrameNumbers("enemy", { start: 0, end: 7 }),
+      frameRate: 12,
+    });
 
+    const config = {
+      speed: 100,
+      rotation: 0,
+    };
+    //@ts-ignore
+    const enemy = this.enemy.get(0, 0, "enemy", config);
+    const positionX = Phaser.Math.Between(50, 350);
+    if (enemy) {
+      enemy.spawn(positionX);
+      enemy.setFlipY(true)
+    }
   }
 
   // Method to kill enemy ship
-  killEnemy(){
-
+  killEnemy(laser, enemy){
+    laser.die()
+    // Play anims until complete then destroy
+    enemy.play("enemy", true).once("animationcomplete", () => {
+      enemy.die();
+      this.score += 10
+    });
   }
 
+  decreaseLife(player,enemy){
+    enemy.die()
+    this.life--
+    if(this.life == 2){
+      player.setTint(0xff0000)
+    }else if (this.life == 1){
+      player.setTint(0xff0000).setAlpha(0.2)
+    }else if (this.life == 0){
+      this.sound.stopAll()
+      // this.sound.play('gameover')
+      this.scene.start('over-scene', {score:this.score})
+    }
+  }
 }
