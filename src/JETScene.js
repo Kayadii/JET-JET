@@ -21,8 +21,13 @@ export default class JETScene extends Phaser.Scene {
     // Player Movement
     this.speed = 100
     this.cursors = undefined;
+
+    // Asteroid
     this.asteroid = undefined;
+
     this.enemy = undefined;
+    
+    // TASK 1: Add Score and Life Text
   }
 
 
@@ -42,7 +47,7 @@ export default class JETScene extends Phaser.Scene {
     })
 
     // ENEMY
-
+    // TASK 3: Create Enemy Ship Using Enemy Class
 
     //ASTEROID
     this.asteroid = this.physics.add.group({
@@ -52,16 +57,19 @@ export default class JETScene extends Phaser.Scene {
     });
 
     this.time.addEvent({
-      delay: Phaser.Math.Between(1000, 5000),
+      delay: 5000,
       callback: this.createAsteroid,
       callbackScope: this,
       loop: true,
     });
 
+    // TASK 4: Add Label for Score and Life
+
     this.physics.add.collider(this.lasers, this.asteroid, this.killAsteroid, null, this)
   }
 
   update(time) {
+    // TASK 5: Add Label for Score and Life Update
     // PLAYER
     this.movePlayer(this.player, time);
   }
@@ -73,9 +81,6 @@ export default class JETScene extends Phaser.Scene {
     this.add.image(300, 400, "bg-far-planets");
     this.add.image(100, 200, "bg-planet").setScale(1.5);
     this.add.image(200, 310, "bg-stars").setScale(2);
-
-    // TASK 1: CREATE FALLING ASTEROIDS (MAKE CLASS IN Enemy.js)
-
   }
 
   // Method to create player
@@ -143,12 +148,17 @@ export default class JETScene extends Phaser.Scene {
     }
   }
 
-  // Method to create enemy
+  // Method to create asteroid
   createAsteroid(){
-    // TASK 2: CREATE ENEMY (MAKE CLASS IN Enemy.js)
+    this.anims.create({
+      key: "asteroid",
+      frames: this.anims.generateFrameNumbers("asteroid", { start: 0, end: 7 }),
+      frameRate: 12,
+    });
+
     const config = {
-      speed: 60,
-      rotation: 0.1,
+      speed: 100,
+      rotation: 0,
     };
     //@ts-ignore
     const asteroid = this.asteroid.get(0, 0, "asteroid", config);
@@ -158,12 +168,25 @@ export default class JETScene extends Phaser.Scene {
     }
   }
 
-  // Method to kill enemy
+  // Method to killasteroid
   killAsteroid(laser, asteroid){
-    // TASK 3: KILL ENEMY
     laser.die()
-    asteroid.die()
-    this.score += 10
+    // Play anims until complete then destroy
+    asteroid.play("asteroid", true).once("animationcomplete", () => {
+      asteroid.die();
+      this.score += 10
+    });
+  }
+
+  // TASK 2: Create Enemy Ship Methods
+  // Method to create enemy ship
+  createEnemy(){
+
+  }
+
+  // Method to kill enemy ship
+  killEnemy(){
+
   }
 
 }

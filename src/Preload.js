@@ -39,7 +39,10 @@ export default class Preload extends Phaser.Scene {
     })
 
     // Enemy ship loadout
-    // TASK 2: LOAD ENEMY SHIPS
+    this.load.spritesheet("enemy", "images/Enemy/Kla'ed - Scout - Destruction.png",{
+                frameWidth : 64,
+                frameHeight : 64
+    })
     
   }
 
