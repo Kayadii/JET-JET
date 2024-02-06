@@ -13,6 +13,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image("bg-far-planets", "images/Environment/Planet Kecil.png");
     this.load.image('gameover', 'images/gameover.png')
     this.load.image('replay-button', 'images/replay.png')
+    this.load.image('startgame', 'images/startgame.png')
     this.load.spritesheet("asteroid", "images/Environment/asteroid.png", {
       frameWidth: 96,
       frameHeight: 96,
@@ -49,6 +50,6 @@ export default class Preload extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("JETScene");
+    this.scene.start("Game-Start");
   }
 }

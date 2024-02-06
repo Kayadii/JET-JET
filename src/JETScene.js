@@ -250,8 +250,14 @@ export default class JETScene extends Phaser.Scene {
     this.life--
     if(this.life == 2){
       player.setTint(0xff0000)
+      this.player_engine.setTint(0xff0000)
+      this.player_engine_thrust.setTint(0xff0000)
+      this.player_weapon.setTint(0xff0000)
     }else if (this.life == 1){
       player.setTint(0xff0000).setAlpha(0.2)
+      this.player_engine.setTint(0xff0000).setAlpha(0.2)
+      this.player_engine_thrust.setTint(0xff0000).setAlpha(0.2)
+      this.player_weapon.setTint(0xff0000).setAlpha(0.2)
     }else if (this.life == 0){
       this.sound.stopAll()
       // this.sound.play('gameover')
