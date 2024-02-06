@@ -28,7 +28,6 @@ export default class JETScene extends Phaser.Scene {
 
     this.enemy = undefined;
     
-    // TASK 1: Add Score and Life Text
     this.scoreLabel = undefined;
     this.lifeLabel = undefined;
   }
@@ -50,7 +49,6 @@ export default class JETScene extends Phaser.Scene {
     })
 
     // ENEMY
-    // TASK 3: Create Enemy Ship Using Enemy Class
     this.enemy = this.physics.add.group({
       classType: Enemy,
       maxSize: 10,
@@ -58,12 +56,11 @@ export default class JETScene extends Phaser.Scene {
     });
 
     this.time.addEvent({
-      delay: 5000,
+      delay: Phaser.Math.Between(1000, 2000),
       callback: this.createEnemy,
       callbackScope: this,
       loop: true,
     });
-
 
     //ASTEROID
     this.asteroid = this.physics.add.group({
@@ -79,7 +76,6 @@ export default class JETScene extends Phaser.Scene {
       loop: true,
     });
 
-    // TASK 4: Add Label for Score and Life
     this.scoreLabel = this.add.text(10, 10, 'score', { 
       fontSize : '16px',
       color : 'black',
@@ -105,7 +101,6 @@ export default class JETScene extends Phaser.Scene {
   }
 
   update(time) {
-    // TASK 5: Add Label for Score and Life Update
     this.scoreLabel.setText('Score : ' + this.score);
     this.lifeLable.setText('life : ' + this.life);
     // PLAYER
@@ -191,7 +186,7 @@ export default class JETScene extends Phaser.Scene {
     this.anims.create({
       key: "asteroid",
       frames: this.anims.generateFrameNumbers("asteroid", { start: 0, end: 7 }),
-      frameRate: 12,
+      frameRate: 24,
     });
 
     const config = {
@@ -203,6 +198,8 @@ export default class JETScene extends Phaser.Scene {
     const positionX = Phaser.Math.Between(50, 350);
     if (asteroid) {
       asteroid.spawn(positionX);
+      // make box smaller
+      asteroid.body.setSize(30, 30)
     }
   }
 
@@ -216,17 +213,16 @@ export default class JETScene extends Phaser.Scene {
     });
   }
 
-  // TASK 2: Create Enemy Ship Methods
   // Method to create enemy ship
   createEnemy(){
     this.anims.create({
       key: "enemy",
       frames: this.anims.generateFrameNumbers("enemy", { start: 0, end: 7 }),
-      frameRate: 12,
+      frameRate: 24,
     });
 
     const config = {
-      speed: 100,
+      speed: 150,
       rotation: 0,
     };
     //@ts-ignore
@@ -235,6 +231,7 @@ export default class JETScene extends Phaser.Scene {
     if (enemy) {
       enemy.spawn(positionX);
       enemy.setFlipY(true)
+      enemy.body.setSize(30, 30)
     }
   }
 

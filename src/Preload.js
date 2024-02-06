@@ -11,6 +11,8 @@ export default class Preload extends Phaser.Scene {
     this.load.image("bg-planet", "images/Environment/Planet Besar.png");
     this.load.image("bg-stars", "images/Environment/Bintang.png");
     this.load.image("bg-far-planets", "images/Environment/Planet Kecil.png");
+    this.load.image('gameover', 'images/gameover.png')
+    this.load.image('replay-button', 'images/replay.png')
     this.load.spritesheet("asteroid", "images/Environment/asteroid.png", {
       frameWidth: 96,
       frameHeight: 96,
